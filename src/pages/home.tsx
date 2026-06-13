@@ -91,13 +91,17 @@ export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
   const marqueeItems = [
   "Hecho con amor",
+  "Cada detalle importa",
   "Tortas personalizadas",
-  "🧁 Cupcakes artesanales",
+  "Cupcakes artesanales",
   "Dulces momentos",
   "Eventos especiales",
-  "✨ Repostería creativa",
   "Cada detalle importa",
-  "🌸 Para tus celebraciones",
+  "Para tus celebraciones",
+  "Eventos Especiales",
+  "Regalos que enamoran",
+  
+
 ];
 
   const cartItems = ALL_PRODUCTS.filter(p => (quantities[p.id] ?? 0) > 0);
