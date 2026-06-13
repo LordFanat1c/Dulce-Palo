@@ -90,12 +90,14 @@ export default function Home() {
   const [direction, setDirection] = useState(1);
   const [showAbout, setShowAbout] = useState(false);
   const marqueeItems = [
-  "🌸 Hecho con amor",
-  "🍰 Tortas personalizadas",
+  "Hecho con amor",
+  "Tortas personalizadas",
   "🧁 Cupcakes artesanales",
-  "💖 Dulces momentos",
-  "🎂 Eventos especiales",
+  "Dulces momentos",
+  "Eventos especiales",
   "✨ Repostería creativa",
+  "Cada detalle importa",
+  "🌸 Para tus celebraciones",
 ];
 
   const cartItems = ALL_PRODUCTS.filter(p => (quantities[p.id] ?? 0) > 0);
@@ -127,6 +129,12 @@ export default function Home() {
   const makeCall = () => {
     window.location.href = PHONE_NUMBER;
   };
+  const openMaps = () => {
+  window.open(
+    "https://www.google.com/maps/search/?api=1&query=Monteros+Tucuman",
+    "_blank"
+  );
+};
 
   const sendCartOrder = () => {
     if (cartItems.length === 0) return;
@@ -158,46 +166,54 @@ export default function Home() {
       )}>
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span
-  className="font-serif text-4xl font-bold text-[#a17a7e]"
-  style={{ fontFamily: "Great Vibes" }}
->
-  Pasteleria
-</span>
-            <motion.button
-              key={heartBeat}
-              onClick={() => setHeartBeat(n => n + 1)}
-              animate={heartBeat > 0 ? { scale: [1, 1.45, 0.9, 1.2, 1] } : {}}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="focus:outline-none"
-              aria-label="Corazón"
-            >
-              <Heart
-  className={cn(
-    "w-4 h-4 transition-colors duration-300",
-    heartBeat > 0
-      ? "fill-[#a17a7e] text-[#a17a7e]"
-      : "text-[#a17a7e]/50"
-  )}
-/>
-            </motion.button>
-          </div>
+  <span
+    className="font-serif text-4xl font-bold text-[#a17a7e]"
+    style={{ fontFamily: "Great Vibes" }}
+  >
+    Pastelería
+  </span>
+
+  <motion.div
+    animate={{
+      scale: [1, 1.18, 1, 1.25, 1],
+    }}
+    transition={{
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+      times: [0, 0.25, 0.5, 0.75, 1],
+    }}
+    className="ml-1 flex items-center"
+  >
+    <Heart
+      className="w-5 h-5 fill-[#a17a7e] text-[#a17a7e]"
+    />
+  </motion.div>
+</div>
 
           <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-            {NAV_LINKS.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={cn(
-  "text-lg font-medium transition-colors duration-300 hover:text-[#c2a1a3]",
-  activeSection === link.href.substring(1)
-    ? "text-[#a17a7e] font-semibold"
-    : "text-[#8d676b]"
-)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map(link => {
+              const isActive = activeSection === link.href.substring(1);
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative text-lg font-medium py-1 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#a17a7e]",
+                    isActive ? "text-[#a17a7e] font-semibold" : "text-[#8d676b]"
+                  )}
+                >
+                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-[#a17a7e]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-2">
@@ -238,6 +254,37 @@ export default function Home() {
         </div>
 
         <div className="container relative z-10 px-4 py-20 md:py-32 flex flex-col items-center text-center max-w-4xl mx-auto">
+            <motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  onClick={openMaps}
+  className="
+    inline-flex
+    items-center
+    gap-2
+    mb-6
+    px-4
+    py-1.5
+    rounded-full
+    border
+    border-[#ddbabc]
+    bg-white/60
+    backdrop-blur-sm
+    text-sm
+    font-medium
+    text-[#a17a7e]
+    tracking-wide
+    cursor-pointer
+    hover:scale-105
+    hover:bg-white/80
+    transition-all
+    duration-300
+  "
+>
+  <MapPin className="w-3.5 h-3.5" />
+  Monteros, Tucumán
+</motion.div>
             <motion.img
             /* ── LOGO PRINCIPAL ── */
   src={logoImg}
@@ -245,7 +292,7 @@ export default function Home() {
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.8, delay: 0.2 }}
-  className="w-[650px] md:w-[650px] lg:w-[750px] h-auto mb-0"
+  className="w-[85vw] max-w-[420px] md:max-w-[600px] lg:max-w-[680px] h-auto mb-0"
 />
           <motion.p
   initial={{ opacity: 0, y: 20 }}
@@ -334,13 +381,14 @@ export default function Home() {
       transition={{ duration: 0.6, }}
       className="overflow-hidden mt-8 w-full"
     >
-      <div className="max-w-5xl mx-auto bg-[#fff9f7] rounded-[32px] shadow-lg p-8 md:p-10">
+      <div className="max-w-5xl mx-auto bg-[#fdf6f6] rounded-[32px] shadow-lg p-8 md:p-10">
 
         <div className="grid md:grid-cols-2 gap-8 items-center">
 
-          {/* FOTO TEMPORAL */}
+          {/* Elemento decorativo */}
           <div className="flex justify-center">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-pink-100 flex items-center justify-center text-pink-400 text-lg">
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-[#fdf6f6] to-[#ddbabc]/40 border border-[#ddbabc] flex items-center justify-center">
+              <Heart className="w-16 h-16 text-[#a17a7e]/40" fill="currentColor" />
             </div>
           </div>
           {/* TEXTO */}
@@ -350,7 +398,7 @@ export default function Home() {
               🌸
             </div>
 
-            <p className="text-[#8f6fc0]">
+            <p className="text-[#7f5f63]">
               Soy apasionada de la pastelería artesanal.
               <br />
               <br />
@@ -368,7 +416,7 @@ export default function Home() {
   <button
   style={{ fontFamily: "Great Vibes" }}
     onClick={() => setShowAbout(false)}
-  className="px-6 py-2 rounded-full bg-[#a17a7e] text-2xl text-white hover:bg-[#a17a7e] transition-all duration-300 shadow-md">
+  className="px-6 py-2 rounded-full bg-[#a17a7e] text-2xl text-white hover:bg-[#8c686c] transition-all duration-300 shadow-md">
     Cerrar
   </button>
 </div>
@@ -382,48 +430,37 @@ export default function Home() {
 </AnimatePresence>
 </motion.div>
         </div>
+
+        {/* Indicador de scroll */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 8, 0] }}
+          transition={{ opacity: { delay: 1.2, duration: 0.6 }, y: { delay: 1.2, duration: 2, repeat: Infinity, ease: "easeInOut" } }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-[#a17a7e]/60"
+        >
+          <ChevronDown className="w-6 h-6" />
+        </motion.div>
       </section>
       <motion.section
-  className="py-8 overflow-hidden"
+  className="py-8 overflow-hidden border-y border-[#ddbabc]/50"
   onClick={() => setDirection(direction * -1)}
 >
   <motion.div
   animate={{
-    x: direction === 1 ? [0, -1200] : [-1200, 0],
+    x: direction === 1 ? ["0%", "-50%"] : ["-50%", "0%"],
   }}
   transition={{
     duration: 40,
     repeat: Infinity,
     ease: "linear",
   }}
-className="flex gap-7 whitespace-nowrap text-[#a17a7e] text-2xl md:text-2xl font-serif font-medium ">
-  <span>🌸 Hecho con amor</span>
-  <span>🍰 Tortas personalizadas</span>
-  <span>🎁 Regalos que enamoran</span>
-  <span>🧁 Cupcakes artesanales</span>
-  <span>🤍 Cada detalle importa</span>
-  <span>💖 Dulces momentos</span>
-  <span>🎂 Eventos especiales</span>
-<span>🎀 Hecho especialmente para vos</span>
-  <span>🌸 Hecho con amor</span>
-  <span>🎁 Regalos que enamoran</span>
-  <span>🍰 Tortas personalizadas</span>
-  <span>🧁 Cupcakes artesanales</span>
-  <span>💖 Dulces momentos</span>
-  <span>🤍 Cada detalle importa</span>
-  <span>🎂 Eventos especiales</span>
-  <span>🎀 Hecho especialmente para vos</span>
-  <span>✨ Repostería creativa</span>
-  <span>🎁 Regalos que enamoran</span>
-  <span>🌸 Hecho con amor</span>
-  <span>🍰 Tortas personalizadas</span>
-  <span>🧁 Cupcakes artesanales</span>
-  <span>💖 Dulces momentos</span>
-  <span>🎀 Hecho especialmente para vos</span>
-  <span>🤍 Cada detalle importa</span>
-  <span>🎂 Eventos especiales</span>
-  <span>✨ Repostería creativa</span>
-  <span>🎁 Regalos que enamoran</span>
+className="flex gap-7 whitespace-nowrap text-[#a17a7e] text-xl md:text-2xl font-serif font-medium w-max cursor-pointer">
+  {[...marqueeItems, ...marqueeItems].map((item, i) => (
+    <span key={i} className="flex items-center gap-7">
+      {item}
+      <span className="text-[#ddbabc]">✦</span>
+    </span>
+  ))}
 </motion.div>
 </motion.section>
 
@@ -470,11 +507,11 @@ className="flex gap-7 whitespace-nowrap text-[#a17a7e] text-2xl md:text-2xl font
   </h2>
 
   <p className="text-muted-foreground max-w-2xl mx-auto">
-    Explorá nuestras delicias artesanales, elaboradas diariamente con ingredientes seleccionados y mucho amor.
+    <span className="text-[#a17a7e] text-2xl">❀</span>Explorá nuestras delicias artesanales.<span className="text-[#a17a7e] text-2xl">❀</span>
   </p>
 
   <div className="mt-4 text-[#c2a1a3] text-lg">
-    ♡ ♡ ♡
+     
   </div>
 </motion.div>
 
@@ -487,8 +524,8 @@ className="flex gap-7 whitespace-nowrap text-[#a17a7e] text-2xl md:text-2xl font
 className={cn(
   "rounded-full px-8 py-3 font-semibold tracking-wide transition-all duration-300",
   activeCategory === cat.key
-  ? "bg-[#a17a7e] text-white shadow-xl scale-105"
-  : "bg-[#fdfafa] text-[#a17a7e] border border-[#ddbabc] hover:bg-[#c2a1a3] hover:text-white"
+  ? "bg-[#a17a7e] text-white shadow-[0_8px_24px_rgba(161,122,126,0.45)] scale-105"
+  : "bg-[#fdfafa] text-[#a17a7e] border border-[#ddbabc] hover:bg-[#c2a1a3] hover:text-white hover:shadow-[0_6px_18px_rgba(161,122,126,0.25)] hover:-translate-y-0.5"
 )}
 >
   {cat.label}
@@ -516,20 +553,24 @@ className={cn(
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
                       >
-                        <Card className="h-full overflow-hidden border-border/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-background/50 backdrop-blur-sm">
-                          <div className="aspect-[4/3] overflow-hidden">
+                        <Card className="h-full overflow-hidden border-border/50 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ddbabc] hover:shadow-[0_18px_45px_-12px_rgba(161,122,126,0.35)] group bg-background/50 backdrop-blur-sm">
+                          <div className="aspect-[4/3] overflow-hidden relative">
                             <img
                               src={item.img}
                               alt={item.name}
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#a17a7e]/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                           </div>
                           <CardHeader>
                             <CardTitle className="font-serif text-xl">{item.name}</CardTitle>
                             <CardDescription className="text-sm line-clamp-2">{item.desc}</CardDescription>
                           </CardHeader>
                           <CardFooter className="flex items-center justify-between border-t border-border/50 pt-4 mt-auto">
-                            <span className="font-semibold text-lg">${item.price.toLocaleString("es-AR")}</span>
+                            <span className="font-semibold text-lg text-[#a17a7e] flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#c2a1a3]" />
+                              ${item.price.toLocaleString("es-AR")}
+                            </span>
                             <div className="flex items-center gap-2">
                               <button
                                 onClick={() => decrement(item.id)}
@@ -543,7 +584,18 @@ className={cn(
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
-                              <span className="w-6 text-center font-semibold text-sm tabular-nums">{qty}</span>
+                              <AnimatePresence mode="popLayout" initial={false}>
+                                <motion.span
+                                  key={qty}
+                                  initial={{ scale: 0.6, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0.6, opacity: 0 }}
+                                  transition={{ duration: 0.18 }}
+                                  className="w-6 text-center font-semibold text-sm tabular-nums inline-block"
+                                >
+                                  {qty}
+                                </motion.span>
+                              </AnimatePresence>
                               <button
                                 onClick={() => increment(item.id)}
                                 className="w-8 h-8 rounded-full border border-[#a17a7e] bg-[#a17a7e] text-white flex items-center justify-center hover:bg-[#8d676b] transition-colors"
@@ -625,7 +677,7 @@ className={cn(
       </section>
 
       {/* ── Galería ── */}
-      <section id="galeria" className="py-0 bg-white">
+      <section id="galeria" className="py-20 bg-white">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">Nuestra Galería</h2>
@@ -639,19 +691,22 @@ className={cn(
             {GALLERY.map((img, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: (i % 3) * 0.1, duration: 0.5 }}
-                className="aspect-square rounded-2xl overflow-hidden group cursor-pointer relative"
+                transition={{ delay: (i % 3) * 0.1, duration: 0.6, ease: "easeOut" }}
+                className="aspect-square rounded-2xl overflow-hidden group cursor-pointer relative shadow-sm transition-all duration-500 hover:shadow-[0_20px_50px_-15px_rgba(161,122,126,0.45)] hover:-translate-y-1"
               >
                 <img
                   src={img}
                   alt={`Galería ${i + 1}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#a17a7e]/80 via-[#a17a7e]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col items-center justify-center gap-2">
                   <SiInstagram className="text-white w-8 h-8 opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 delay-100" />
+                  <span className="text-white text-xs font-medium tracking-wide opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-150">
+                    Ver más
+                  </span>
                 </div>
               </motion.div>
             ))}
@@ -660,7 +715,7 @@ className={cn(
       </section>
 
       {/* ── Pedido Personalizado ── */}
-      <section id="pedido" className="py-24 bg-secondary/30 relative overflow-hidden">
+      <section id="pedido" className="py-28 bg-secondary/30 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
@@ -671,14 +726,15 @@ className={cn(
             viewport={{ once: false, margin: "-80px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">Pedido Personalizado</h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              ¿Tenés una celebración especial? Contanos para afinar detalles.
+
+            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-5">Pedido Personalizado</h2>
+            <p className="text-muted-foreground text-lg mb-12">
+              ¿Tenés una celebración especial? Contáctanos para afinar detalles.
             </p>
 
-            <div className="space-y-6">
-              <div className="flex gap-4">
-  <div className="w-14 h-14 rounded-2xl bg-[#fdf6f6] border border-[#ddbabc] shadow-[0_8px_25px_rgba(161,122,126,0.15)] flex items-center justify-center shrink-0">
+            <div className="space-y-8">
+              <div className="flex gap-4 group">
+  <div className="w-14 h-14 rounded-2xl bg-[#fdf6f6] border border-[#ddbabc] shadow-[0_8px_25px_rgba(161,122,126,0.15)] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_12px_30px_rgba(161,122,126,0.3)]">
     <Star className="w-6 h-6 text-[#a17a7e]" fill="currentColor" />
   </div>
 
@@ -693,8 +749,8 @@ className={cn(
   </div>
 </div>
 
-<div className="flex gap-4">
-  <div className="w-14 h-14 rounded-2xl bg-[#fdf6f6] border border-[#ddbabc] shadow-[0_8px_25px_rgba(161,122,126,0.15)] flex items-center justify-center shrink-0">
+<div className="flex gap-4 group">
+  <div className="w-14 h-14 rounded-2xl bg-[#fdf6f6] border border-[#ddbabc] shadow-[0_8px_25px_rgba(161,122,126,0.15)] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_12px_30px_rgba(161,122,126,0.3)]">
     <Clock className="w-6 h-6 text-[#a17a7e]" />
   </div>
 
@@ -709,6 +765,35 @@ className={cn(
   </div>
 </div>
             </div>
+
+            <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-4">
+              <Button
+                size="lg"
+                onClick={() => openWhatsApp("Hola! Me gustaría hacer un pedido personalizado, ¿Estaria disponible?")}
+                className="rounded-full gap-2 h-14 px-8 text-base bg-[#a17a7e] hover:bg-[#8c686c] text-white border-0 shadow-[0_10px_30px_rgba(161,122,126,0.4)] hover:shadow-[0_14px_36px_rgba(161,122,126,0.5)] transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <SiWhatsapp className="w-5 h-5" />
+                Solicitar mi pedido por WhatsApp
+              </Button>
+              <span
+  className="
+    inline-flex
+    items-center
+    gap-2
+    px-4
+    py-2
+    rounded-full
+    bg-[#fdf6f6]
+    border
+    border-[#ddbabc]
+    text-[#a17a7e]
+    text-sm
+    font-medium
+  "
+>
+  ✓ Respuesta dentro del día
+</span>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -716,20 +801,24 @@ className={cn(
       {/* ── Contacto & Footer ── */}
 <footer
   id="contacto"
-  className="bg-[#a17a7e] text-white pt-7 pb-5"
+  className="bg-[#a17a7e] text-white pt-12 pb-6 border-t border-white/10"
 >
   <div className="container px-4 mx-auto">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
 
       <div>
-        <h2 className="text-2xl font-serif font-bold mb-2 text-white">
+        <h2
+          className="text-4xl font-bold mb-3 text-white"
+          style={{ fontFamily: "Great Vibes" }}
+        >
           Dulce Palo
         </h2>
 
         <div className="flex gap-3">
           <a
             href="#"
-            className="w-8 h-8 rounded-full bg-[#c2a1a3] flex items-center justify-center hover:bg-[#ddbabc] hover:text-white transition-colors"
+            aria-label="Instagram de Dulce Palo"
+            className="w-9 h-9 rounded-full bg-[#c2a1a3] flex items-center justify-center hover:bg-[#ddbabc] hover:text-white hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
           >
             <SiInstagram className="w-4 h-4" />
           </a>
@@ -738,7 +827,8 @@ className={cn(
             href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noreferrer"
-            className="w-8 h-8 rounded-full bg-[#c2a1a3] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-colors"
+            aria-label="WhatsApp de Dulce Palo"
+            className="w-9 h-9 rounded-full bg-[#c2a1a3] flex items-center justify-center hover:bg-[#25D366] hover:text-white hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
           >
             <SiWhatsapp className="w-4 h-4" />
           </a>
@@ -752,7 +842,7 @@ className={cn(
 
     </div>
 
-    <div className="border-t border-[#ddbabc]/60 pt-4 text-center text-sm text-white/80">
+    <div className="border-t border-[#ddbabc]/60 pt-5 text-center text-sm text-white/80 tracking-wide">
       © {new Date().getFullYear()} Dulce Palo Pastelería. Todos los derechos reservados.
     </div>
   </div>
